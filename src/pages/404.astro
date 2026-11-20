@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Window from '../components/Window.astro';
+import PixelIcon from '../components/PixelIcon.astro';
+---
+<Base title="Not found">
+  <main class="desk__main">
+    <div class="alert">
+      <Window title="Alert" active close={false}>
+        <div class="alert__body">
+          <PixelIcon name="alert" />
+          <div>
+            <p>The page you asked for could not be found. It may have moved, or it never existed.</p>
+            <a class="btn btn--default" href="/">OK</a>
+          </div>
+        </div>
+      </Window>
+    </div>
+  </main>
+</Base>

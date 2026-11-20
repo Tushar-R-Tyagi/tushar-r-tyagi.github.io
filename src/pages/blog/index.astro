@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import Window from '../../components/Window.astro';
+import Tag from '../../components/Tag.astro';
+import { getPosts, isoDate } from '../../lib/content';
+const posts = await getPosts();
+---
+<Base title="Log">
+  <main class="desk__main">
+    <Window title="Log" active>
+      <div slot="info" class="window__info"><span>{posts.length} entries</span><span class="muted">newest first</span></div>
+      <div class="log__head" aria-hidden="true"><span>Date</span><span>Entry</span><span>Tags</span></div>
+      {posts.map((p) => (
+        <a class="log-row" href={`/blog/${p.id}/`}>
+          <span class="log-row__date">{isoDate(p.data.date)}</span>
+          <span class="log-row__title">{p.data.title}</span>
+          <span class="log-row__tags">{p.data.tags.slice(0, 2).map((t) => <Tag name={t} />)}</span>
+        </a>
+      ))}
+    </Window>
+  </main>
+</Base>

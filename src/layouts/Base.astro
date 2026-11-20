@@ -1,0 +1,58 @@
+---
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/ibm-plex-mono/600.css';
+import '@fontsource/ibm-plex-mono/400-italic.css';
+import '@fontsource-variable/literata';
+import '@fontsource-variable/literata/opsz-italic.css';
+import '@fontsource/pixelify-sans/500.css';
+import '@fontsource/pixelify-sans/600.css';
+import '../styles/global.css';
+import PixelIcon from '../components/PixelIcon.astro';
+import { site } from '../../site.config';
+
+interface Props { title?: string; description?: string }
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.role}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={site.name} href="/rss.xml" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+  </head>
+  <body>
+    <header class="menubar">
+      <PixelIcon name="logo" />
+      <a class="menubar__home" href="/">Tushar</a>
+      <a href="/#projects">Projects</a>
+      <a href="/blog/">Log</a>
+      <a href="/#links">Links</a>
+      <span class="menubar__spacer"></span>
+      <span id="clock" aria-hidden="true"></span>
+    </header>
+    <div class="desk">
+      <slot />
+      <footer class="desk__footer">
+        <span>© {new Date().getFullYear()} {site.name}</span>
+        <span style="font-style: italic">every window here is a .md file</span>
+      </footer>
+    </div>
+    <script>
+      const el = document.getElementById('clock');
+      const tick = () => {
+        if (!el) return;
+        el.textContent = new Date().toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' }).replace(',', '');
+      };
+      tick();
+      setInterval(tick, 30_000);
+    </script>
+  </body>
+</html>

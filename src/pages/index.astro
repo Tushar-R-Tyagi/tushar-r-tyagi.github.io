@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import Window from '../components/Window.astro';
+import Tag from '../components/Tag.astro';
+import PixelIcon from '../components/PixelIcon.astro';
+import { getProjects, getPosts, isoDate, highlight } from '../lib/content';
+import { site } from '../../site.config';
+import * as about from '../../content/about.md';
+import * as now from '../../content/now.md';
+
+const projects = await getProjects();
+const posts = await getPosts();
+const a = about.frontmatter;
+const n = now.frontmatter;
+const colours = ['sage', 'butter', 'lilac', 'accent'];
+
+// tag → number of projects + posts using it
+const counts = new Map<string, number>();
+for (const p of projects) counts.set(p.data.tag, (counts.get(p.data.tag) ?? 0) + 1);
+for (const p of posts) for (const t of p.data.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
+const tagCounts = [...counts].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]));
+---
+<Base>
+  <main class="desk__main">
+    <Window title={`About ${a.name.split(' ')[0]}`} active>
+      <div class="about">
+        <figure class="about__photo">
+          <div class="about__frame">
+            {a.photo ? (
+              <img src={a.photo} alt={`Portrait of ${a.name}`} />
+            ) : (
+              <>
+                <svg viewBox="0 0 60 60" width="96" height="96" aria-hidden="true"><circle cx="30" cy="22" r="11" fill="var(--well)" stroke="var(--ink)" stroke-width="2" /><path d="M10 56 C 10 40, 50 40, 50 56" fill="var(--well)" stroke="var(--ink)" stroke-width="2" /></svg>
+                <span class="about__placeholder">add photo in about.md</span>
+              </>
+            )}
+          </div>
+          {a.photoCaption && <figcaption>{a.photoCaption}</figcaption>}
+        </figure>
+        <div class="about__text">
+          <h1 class="about__name"><span>{a.name}</span></h1>
+          <p class="role">{a.role}</p>
+          <ul class="bullets">
+            {a.bullets.map((b: string, i: number) => <li><span set:html={highlight(b, colours[i % 4])} /></li>)}
+          </ul>
+          <div class="buttons">
+            <a class="btn btn--default" href="#projects">See projects</a>
+            <a class="btn" href="#log">Read the log</a>
+          </div>
+        </div>
+      </div>
+    </Window>
+
+    <Window title="Projects" id="projects" class="offset" scroll>
+      <div slot="info" class="window__info">
+        <span>{projects.length} {projects.length === 1 ? 'item' : 'items'}</span>
+        <span class="muted">sorted by: most recent</span>
+      </div>
+      {projects.map((p, i) => (
+        <a class:list={['row', { 'row--featured': p.data.featured }]} href={`/projects/${p.id}/`}>
+          <span class="thumb">
+            {p.data.figure && <img src={p.data.figure} alt={p.data.figureAlt ?? ''} loading="lazy" />}
+          </span>
+          <span class="row__text">
+            <span class="row__meta"><Tag name={p.data.tag} /><span class="row__num">{String(projects.length - i).padStart(2, '0')}</span></span>
+            <h3 class="row__title">{p.data.title}</h3>
+            <p class="row__finding">{p.data.finding}</p>
+          </span>
+          <span class="row__open">Open ›</span>
+        </a>
+      ))}
+    </Window>
+
+    <Window title="Log" id="log">
+      <div class="log__head" aria-hidden="true"><span>Date</span><span>Entry</span><span>Tags</span></div>
+      {posts.slice(0, 5).map((p) => (
+        <a class="log-row" href={`/blog/${p.id}/`}>
+          <span class="log-row__date">{isoDate(p.data.date)}</span>
+          <span class="log-row__title">{p.data.title}</span>
+          <span class="log-row__tags">{p.data.tags.slice(0, 2).map((t) => <Tag name={t} />)}</span>
+        </a>
+      ))}
+      {posts.length > 5 && <a class="more" href="/blog/">All {posts.length} entries ›</a>}
+    </Window>
+  </main>
+
+  <aside class="desk__side" id="links">
+    <div class="icons">
+      <a class="icon-link" href={site.links.github}><PixelIcon name="github" /><span>GitHub</span></a>
+      <a class="icon-link" href={site.links.linkedin}><PixelIcon name="linkedin" /><span>LinkedIn</span></a>
+      <a class="icon-link" href="/rss.xml"><PixelIcon name="rss" /><span>RSS</span></a>
+    </div>
+
+    <Window title="Now" close={false}>
+      <div class="now">
+        <p class="now__updated">updated {isoDate(new Date(n.updated))}</p>
+        {n.items.map((it: { label: string; text: string }) => (
+          <div><p class="now__label">{it.label}</p><p class="now__text">{it.text}</p></div>
+        ))}
+      </div>
+    </Window>
+
+    <Window title="Browse by tag" close={false}>
+      <nav class="taglist">
+        {tagCounts.map(([t, c]) => (
+          <a href={`/tags/${t.toLowerCase()}/`}><Tag name={t} /><span class="count">{c} {c === 1 ? 'item' : 'items'}</span></a>
+        ))}
+      </nav>
+    </Window>
+  </aside>
+</Base>

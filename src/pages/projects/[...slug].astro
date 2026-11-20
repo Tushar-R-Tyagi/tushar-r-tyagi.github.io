@@ -1,0 +1,39 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Window from '../../components/Window.astro';
+import Tag from '../../components/Tag.astro';
+import { getProjects, isoDate } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+const { project } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+---
+<Base title={d.title} description={d.finding}>
+  <div class="desk__main">
+    <Window title={`${project.id}.md`} active scroll>
+      <article class="article">
+        <div class="prose">
+          <div class="prose__meta"><Tag name={d.tag} link /><span>project · {isoDate(d.date)}</span></div>
+          <h1>{d.title}</h1>
+          <p class="project-finding">{d.finding}</p>
+          {d.figure && (
+            <figure class="fig project-figure">
+              <div class="fig__frame"><img src={d.figure} alt={d.figureAlt ?? ''} /></div>
+              {d.figureAlt && <figcaption>{d.figureAlt}</figcaption>}
+            </figure>
+          )}
+          <Content />
+          {d.link && <p><a class="btn btn--default" href={d.link}>Read the paper / code ›</a></p>}
+        </div>
+      </article>
+    </Window>
+  </div>
+  <aside class="desk__side">
+    <a class="btn" href="/#projects" style="align-self: flex-start">‹ All projects</a>
+  </aside>
+</Base>

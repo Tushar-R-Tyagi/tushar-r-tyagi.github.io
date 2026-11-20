@@ -1,0 +1,49 @@
+# Field Desk style for matplotlib.
+# Use it in any script:  plt.style.use("figures.mplstyle")
+# Save figures into public/figures/ and reference them as /figures/name.svg
+
+figure.facecolor: fffdf7
+figure.figsize: 6.0, 3.0
+figure.dpi: 150
+savefig.facecolor: fffdf7
+savefig.bbox: tight
+savefig.format: svg
+svg.fonttype: none
+
+axes.facecolor: fffdf7
+axes.edgecolor: 22201c
+axes.linewidth: 1.5
+axes.labelcolor: 22201c
+axes.titlesize: 11
+axes.titleweight: 600
+axes.titlelocation: left
+axes.spines.top: False
+axes.spines.right: False
+axes.grid: True
+axes.grid.axis: y
+axes.prop_cycle: cycler(color=['22201c', 'e5582b', '8fb07e', 'c9a92c', '8f7fc4'])
+
+grid.color: d9d1bf
+grid.linestyle: --
+grid.linewidth: 0.8
+
+lines.linewidth: 2.2
+lines.markersize: 6
+patch.edgecolor: 22201c
+patch.linewidth: 1.5
+patch.force_edgecolor: True
+
+font.family: monospace
+font.monospace: IBM Plex Mono, DejaVu Sans Mono
+font.size: 10
+text.color: 22201c
+xtick.color: 22201c
+ytick.color: 22201c
+xtick.labelcolor: 6f6656
+ytick.labelcolor: 6f6656
+
+legend.frameon: True
+legend.edgecolor: 22201c
+legend.facecolor: fbf8f0
+legend.fancybox: False
+legend.framealpha: 1

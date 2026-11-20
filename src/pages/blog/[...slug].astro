@@ -1,0 +1,56 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Window from '../../components/Window.astro';
+import Tag from '../../components/Tag.astro';
+import Comments from '../../components/Comments.astro';
+import { getPosts, isoDate, readingTime } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const minutes = readingTime(post.body);
+---
+<Base title={post.data.title} description={post.data.description}>
+  <div class="desk__main">
+    <Window title={`${post.id}.md`} active scroll>
+      <article class="article">
+        <div class="prose">
+          <div class="prose__meta">
+            {post.data.tags.map((t) => <Tag name={t} link />)}
+            <span>{isoDate(post.data.date)} · {minutes} min read</span>
+          </div>
+          <h1>{post.data.title}</h1>
+          <Content />
+        </div>
+      </article>
+    </Window>
+    {post.data.comments && <Comments />}
+  </div>
+
+  <aside class="desk__side">
+    <Window title="Get Info" close={false}>
+      <dl class="info">
+        <dt>kind</dt><dd>blog post</dd>
+        <dt>file</dt><dd>{post.id}.md</dd>
+        <dt>date</dt><dd>{isoDate(post.data.date)}</dd>
+        <dt>tags</dt><dd>{post.data.tags.join(', ') || '—'}</dd>
+        <dt>status</dt><dd><span class:list={['tag', post.data.draft ? 'tag--dashed' : 'tag--sage']}>{post.data.draft ? 'draft' : 'published'}</span></dd>
+      </dl>
+    </Window>
+    {toc.length > 0 && (
+      <Window title="Contents" close={false}>
+        <nav class="contents">
+          {toc.map((h) => <a class={`depth-${h.depth}`} href={`#${h.slug}`}>{h.text}</a>)}
+          {post.data.comments && <a href="#comments">Messages</a>}
+        </nav>
+      </Window>
+    )}
+    <a class="btn" href="/blog/" style="align-self: flex-start">‹ All entries</a>
+  </aside>
+</Base>

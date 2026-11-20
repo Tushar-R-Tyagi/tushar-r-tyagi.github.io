@@ -1,0 +1,33 @@
+---
+import Window from './Window.astro';
+import { site } from '../../site.config';
+const g = site.giscus;
+const ready = Boolean(g.repo && g.repoId && g.categoryId);
+const theme = new URL('/giscus-field-desk.css', Astro.site).href;
+---
+<Window title="Messages" id="comments">
+  <div class="comments">
+    {ready ? (
+      <script
+        is:inline
+        src="https://giscus.app/client.js"
+        data-repo={g.repo}
+        data-repo-id={g.repoId}
+        data-category={g.category}
+        data-category-id={g.categoryId}
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme={theme}
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async
+      ></script>
+    ) : (
+      <p class="comments__note">Comments will appear here once giscus is set up — see the README.</p>
+    )}
+  </div>
+</Window>

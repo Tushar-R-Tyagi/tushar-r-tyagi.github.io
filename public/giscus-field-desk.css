@@ -1,0 +1,49 @@
+/* Field Desk theme for giscus comments. giscus loads this from your live site. */
+main {
+  --color-prettylights-syntax-comment: #6f6656;
+  --color-prettylights-syntax-constant: #22201c;
+  --color-prettylights-syntax-entity: #22201c;
+  --color-prettylights-syntax-keyword: #e5582b;
+  --color-prettylights-syntax-string: #22201c;
+  --color-btn-text: #22201c;
+  --color-btn-bg: #fbf8f0;
+  --color-btn-border: #22201c;
+  --color-btn-shadow: 0 0 transparent;
+  --color-btn-inset-shadow: 0 0 transparent;
+  --color-btn-hover-bg: #f3e6a6;
+  --color-btn-hover-border: #22201c;
+  --color-btn-active-bg: #f3e6a6;
+  --color-btn-selected-bg: #f3e6a6;
+  --color-btn-primary-text: #f2ede1;
+  --color-btn-primary-bg: #22201c;
+  --color-btn-primary-border: #22201c;
+  --color-btn-primary-hover-bg: #3a3730;
+  --color-btn-primary-disabled-text: #f2ede1;
+  --color-btn-primary-disabled-bg: #6f6656;
+  --color-fg-default: #22201c;
+  --color-fg-muted: #6f6656;
+  --color-fg-subtle: #6f6656;
+  --color-canvas-default: #fffdf7;
+  --color-canvas-overlay: #fffdf7;
+  --color-canvas-inset: #fbf8f0;
+  --color-canvas-subtle: #fbf8f0;
+  --color-border-default: #22201c;
+  --color-border-muted: #d9d1bf;
+  --color-neutral-muted: rgba(34, 32, 28, 0.1);
+  --color-accent-fg: #5b4ba8;
+  --color-accent-emphasis: #22201c;
+  --color-accent-muted: #ddd5f0;
+  --color-accent-subtle: #ddd5f0;
+  --color-success-fg: #22201c;
+  --color-attention-fg: #22201c;
+  --color-attention-muted: #f3e6a6;
+  --color-danger-fg: #e5582b;
+  --color-primer-shadow-inset: none;
+  --color-scale-gray-1: #d9d1bf;
+  --color-scale-blue-1: #ddd5f0;
+  --color-social-reaction-bg-hover: #f3e6a6;
+  --color-social-reaction-bg-reacted-hover: #f3e6a6;
+}
+main .gsc-comment-box, main .gsc-comment > div { border-radius: 0 !important; border-width: 2px !important; }
+main .gsc-comment-box-textarea { font-family: Georgia, serif; font-size: 16px; }
+main .btn { border-radius: 8px !important; border-width: 2px !important; }

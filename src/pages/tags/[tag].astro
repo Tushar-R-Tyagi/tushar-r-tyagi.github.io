@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import Window from '../../components/Window.astro';
+import Tag from '../../components/Tag.astro';
+import { getProjects, getPosts, isoDate } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const [projects, posts] = await Promise.all([getProjects(), getPosts()]);
+  const tags = new Set<string>();
+  projects.forEach((p) => tags.add(p.data.tag.toLowerCase()));
+  posts.forEach((p) => p.data.tags.forEach((t) => tags.add(t.toLowerCase())));
+  return [...tags].map((tag) => ({
+    params: { tag },
+    props: {
+      projects: projects.filter((p) => p.data.tag.toLowerCase() === tag),
+      posts: posts.filter((p) => p.data.tags.some((t) => t.toLowerCase() === tag)),
+    },
+  }));
+}
+const { tag } = Astro.params;
+const { projects, posts } = Astro.props;
+---
+<Base title={`Tagged ${tag}`}>
+  <main class="desk__main">
+    <Window title={`Tagged: ${tag}`} active>
+      <div slot="info" class="window__info"><Tag name={tag} /><span class="muted">{projects.length + posts.length} items</span></div>
+      {projects.map((p) => (
+        <a class="log-row" href={`/projects/${p.id}/`}>
+          <span class="log-row__date">project</span>
+          <span class="log-row__title">{p.data.title}</span>
+        </a>
+      ))}
+      {posts.map((p) => (
+        <a class="log-row" href={`/blog/${p.id}/`}>
+          <span class="log-row__date">{isoDate(p.data.date)}</span>
+          <span class="log-row__title">{p.data.title}</span>
+        </a>
+      ))}
+    </Window>
+  </main>
+</Base>

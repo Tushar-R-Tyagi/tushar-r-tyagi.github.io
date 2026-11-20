@@ -1,0 +1,7 @@
+---
+import { tagColour } from '../../site.config';
+interface Props { name: string; link?: boolean }
+const { name, link = false } = Astro.props;
+const cls = `tag tag--${tagColour(name)}`;
+---
+{link ? <a class={cls} href={`/tags/${name.toLowerCase()}/`}>{name}</a> : <span class={cls}>{name}</span>}
