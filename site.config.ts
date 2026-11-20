@@ -11,7 +11,8 @@ export const site = {
 
   links: {
     github: 'https://github.com/Tushar-R-Tyagi',
-    linkedin: 'https://www.linkedin.com/in/YOUR-LINKEDIN-HANDLE', // TODO
+    linkedin: 'https://www.linkedin.com/in/tushar-tyagi11', 
+    x: 'https://x.com/tushartyagi2000',
   },
 
   // Tag name (as written in frontmatter) → colour.
