@@ -5,8 +5,7 @@ role: Independent AI safety researcher
 
 # Put your photo in /public (e.g. public/photo.jpg) and write its path here.
 # Leave empty to show the placeholder.
-photo: ""
-photoCaption: portrait.jpg
+photo: /photo.JPEG
 
 # One line per bullet. Wrap a phrase in ==double equals== to highlight it.
 bullets:
